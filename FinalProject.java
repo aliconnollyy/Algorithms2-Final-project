@@ -23,6 +23,8 @@ public class FinalProject
 		
 		Map<Integer, Integer> mapStopsIndices = new HashMap<Integer, Integer>();
 		
+		TST <String> busStopTST = new TST<String>();
+		TST<String> arrivalTimeTST = new TST<String>();
 		
 	    try(BufferedReader br1 = new BufferedReader(new FileReader("/Users/aliconnolly/Algorithms2 Final project/Algorithms2-Final-project/stops.txt")))
 	    {
@@ -59,7 +61,7 @@ public class FinalProject
 	    		
 	    		
 				
-	    	
+	    		busStopTST.put(stop_name, line);
 				
 	    		mapStopsIndices.put(stop_id, stopIndex);
 	    		stopIndex++;	
@@ -128,7 +130,7 @@ public class FinalProject
 			 arrival_time = parts[1].trim();
 			 stop_id3 = parts[3].trim();
 	
-			
+			arrivalTimeTST.put(arrival_time, line3);
 			int fromStopIndex = mapStopsIndices.get(prev_stop_id);
 			int toStopIndex = mapStopsIndices.get(Integer.parseInt(stop_id3));
 								
@@ -142,6 +144,8 @@ public class FinalProject
 	{
 		System.out.println("No such file found.");
 	}
+			
+		
 	    
 // GET USER INPUT		
 		// get user to input 2 bus stops
