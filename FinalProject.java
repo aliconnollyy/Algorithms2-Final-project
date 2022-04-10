@@ -70,6 +70,32 @@ public class FinalProject
 	    catch(IOException e)
 	    {
 	    	System.out.println("Sorry no such file found.");
+		}
+
+		try(BufferedReader br2 = new BufferedReader(new FileReader("/Users/aliconnolly/Algorithms2 Final project/Algorithms2-Final-project/transfers.txt")))
+		{
+			br2.readLine();
+			String line2 = null;
+			while((line2 = br2.readLine()) != null)
+			{
+				
+				String[] parts = line2.split(",");
+				int from_stop_id = Integer.parseInt(parts[0].trim());
+				int to_stop_id = Integer.parseInt(parts[1].trim());	
+				
+				double transferCost = (Integer.parseInt(parts[2].trim()) == 0) ? 2.0 : Double.parseDouble(parts[3])/100;
+								
+				int fromStopIndex = mapStopsIndices.get(from_stop_id);
+				int toStopIndex = mapStopsIndices.get(to_stop_id);
+
+			
+			}
+		}
+	    catch(IOException e)
+		{
+			System.out.println("File not found");	
+        } 
+			//br2.close();
 	    
 // GET USER INPUT		
 		// get user to input 2 bus stops
