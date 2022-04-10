@@ -19,7 +19,7 @@ public class FinalProject
 {
 	public static void main(String[] args) throws IOException 
 	{
-		int numOfVertices = 0;
+		int numOfStops = 0;
 		
 		Map<Integer, Integer> mapStopsIndices = new HashMap<Integer, Integer>();
 		
@@ -29,71 +29,69 @@ public class FinalProject
 	    try(BufferedReader br1 = new BufferedReader(new FileReader("/Users/aliconnolly/Algorithms2 Final project/Algorithms2-Final-project/stops.txt")))
 	    {
 	    	br1.readLine();
-	    	String line = null;
+	    	
+	    	String lineOfFile = null;
 	    	int stopIndex = 0;
+		   	String stop_name = null;
 			
-	    	String stop_name = null;
-			
-	    	while((line = br1.readLine()) != null)
+	    	while((lineOfFile = br1.readLine()) != null)
 	    	{
-	    		String[] parts = line.split(",");			
+	    		String[] parts = lineOfFile.split(",");			
 				
 	    		int stop_id = Integer.parseInt(parts[0].trim());
 	    		stop_name = parts[2].trim();
-                String[] checkPrefix = stop_name.split(" ");
-                String[] tempArray = new String[checkPrefix.length-1];
-                if(checkPrefix[0] == "WB" || checkPrefix[0] == "NB" || checkPrefix[0] == "SB" || checkPrefix[0] == "EB" || checkPrefix[0] == "flagstop")
+	    		
+                String[] checkNamePrefix = stop_name.split(" ");
+                String[] tempArray = new String[checkNamePrefix.length-1];
+                if(checkNamePrefix[0] == "WB" || checkNamePrefix[0] == "NB" || checkNamePrefix[0] == "SB" || checkNamePrefix[0] == "EB" || checkNamePrefix[0] == "flagstop")
                 {
-                	String savePrefix = checkPrefix[0];
-                	for(int i = 0, k=0; i < checkPrefix.length; i++)
+                	String saveNamePrefix = checkNamePrefix[0];
+                	for(int i = 0, k = 0; i < checkNamePrefix.length; i++)
                 	{
                 		if(i == 0)
                 		{
                 			continue;
                 		}
-                		tempArray[k++] = checkPrefix[i];
+                		tempArray[k++] = checkNamePrefix[i];
                 	}
-                	tempArray[tempArray.length-1] = savePrefix;
+                	tempArray[tempArray.length-1] = saveNamePrefix;
                 	stop_name = tempArray.toString();
                 	
                 }
-                
-	    		
-	    		
-				
-	    		busStopTST.put(stop_name, line);
+	    		busStopTST.put(stop_name, lineOfFile);
 				
 	    		mapStopsIndices.put(stop_id, stopIndex);
 	    		stopIndex++;	
 	    	}
+	    	
 			
-	    	List<String> stops = Files.readAllLines(new File("/Users/aliconnolly/Algorithms2 Final project/Algorithms2-Final-project/stops.txt").toPath(), Charset.defaultCharset());
-	    	for (int i = 1; i < stops.size(); i++)
+	    	List<String> stopsFile = Files.readAllLines(new File("/Users/aliconnolly/Algorithms2 Final project/Algorithms2-Final-project/stops.txt").toPath(), Charset.defaultCharset());
+	    	for (int i = 1; i < stopsFile.size(); i++)
 	    	{
-	    		String[] parts = stops.get(i).split(",");
+	    		String[] parts = stopsFile.get(i).split(",");
 	    		int currentStop = Integer.parseInt(parts[0]);
-	    		if (currentStop > numOfVertices)
+	    		if (currentStop > numOfStops)
 	    		{
-	    			numOfVertices = currentStop;
+	    			numOfStops = currentStop;
 	    		}
 	    	}
 	    }
 	    catch(IOException e)
 	    {
-	    	System.out.println("Sorry no such file found.");
+	    	System.out.println("Error. File not found.");
 	    }
-			
-			//br1.close();
-			EdgeWeightedDigraph graph = new EdgeWeightedDigraph(numOfVertices);
+
+	    
+		EdgeWeightedDigraph graph = new EdgeWeightedDigraph(numOfStops);
 			
 		try(BufferedReader br2 = new BufferedReader(new FileReader("/Users/aliconnolly/Algorithms2 Final project/Algorithms2-Final-project/transfers.txt")))
 		{
 			br2.readLine();
-			String line2 = null;
-			while((line2 = br2.readLine()) != null)
+			String lineOfFile = null;
+			while((lineOfFile = br2.readLine()) != null)
 			{
 				
-				String[] parts = line2.split(",");
+				String[] parts = lineOfFile.split(",");
 				int from_stop_id = Integer.parseInt(parts[0].trim());
 				int to_stop_id = Integer.parseInt(parts[1].trim());	
 				
@@ -107,148 +105,143 @@ public class FinalProject
 		}
 	    catch(IOException e)
 		{
-			System.out.println("File not found");	
+			System.out.println("Error. File not found");	
         } 
-			//br2.close();
+
 			
 	try(BufferedReader br3 = new BufferedReader(new FileReader("/Users/aliconnolly/Algorithms2 Final project/Algorithms2-Final-project/stop_times.txt")))
 	{	
 	   br3.readLine();
-	   String line3 = null;
+	   String lineOfFile = null;
 	   int prev_stop_id = 646;
 	   double transferCost = 1.0;
 			
 	   String arrival_time = null;
-	   String stop_id3 = null;
+	   String stop_id = null;
 			
 			
-	   while((line3 = br3.readLine()) != null)
+	   while((lineOfFile = br3.readLine()) != null)
 		{
 				
-			String[] parts = line3.split(",");
+			String[] parts = lineOfFile.split(",");
 				
 			 arrival_time = parts[1].trim();
-			 stop_id3 = parts[3].trim();
+			 stop_id = parts[3].trim();
 	
-			arrivalTimeTST.put(arrival_time, line3);
+			arrivalTimeTST.put(arrival_time, lineOfFile);
 			int fromStopIndex = mapStopsIndices.get(prev_stop_id);
-			int toStopIndex = mapStopsIndices.get(Integer.parseInt(stop_id3));
+			int toStopIndex = mapStopsIndices.get(Integer.parseInt(stop_id));
 								
 			graph.addEdge(new DirectedEdge(fromStopIndex, toStopIndex, transferCost));
 				
-			prev_stop_id = Integer.parseInt(stop_id3);
+			prev_stop_id = Integer.parseInt(stop_id);
 	     } 
-		//br3.close();	
 	}
 	catch(IOException e)
 	{
-		System.out.println("No such file found.");
+		System.out.println("Error. File not found.");
 	}
-			
-			
-	boolean quit = false;
-	Scanner scanner = new Scanner(System.in);
-	System.out.println("Welcome to the Vancouver public transport system!");
-	System.out.println("This system allows you to: \n1. Find shortest path between 2 bus stops. \n2. Retrieve all info related to a particular bus stop. \n3. Get details of all trips arriving at specified time. \n");
-	System.out.println("Which option would you like to choose? \nPlease choose by typing 1, 2 or 3. Or type 'quit' if you would like to close the application.\n");
 	
-	//do {	
-				
-		 Scanner input = new Scanner(System.in);
-						
-	     if(input.hasNextInt())
-		 {
-		    Integer userChoice = input.nextInt();
-		    
-		    if(userChoice == 1)
-		    {
-				System.out.println("Please enter the bus stop 1\n");
-				Scanner firstStop = new Scanner(System.in);
-				if(firstStop.hasNextLine())
+	
+boolean quit = false;
+Scanner scanner = new Scanner(System.in);
+System.out.println("Welcome to the Vancouver public transport system!");
+System.out.println("This system allows you to: \n1. Find shortest path between 2 bus stops. \n2. Retrieve all info related to a particular bus stop. \n3. Get details of all trips arriving at specified time. \n");
+
+while(!quit) 
+{				
+	System.out.println("Which option would you like to choose? \nPlease choose by typing 1, 2 or 3. Or type 'quit' if you would like to close the application.\n");
+	if(scanner.hasNextInt()) 
+	{
+		Integer userChoice = scanner.nextInt();
+		scanner.skip("\\R?");
+
+		if(userChoice == 1)
+		{
+			System.out.println("Please enter the first bus stop.\n");
+			if(scanner.hasNextLine())
+			{
+				Integer source = scanner.nextInt();
+				scanner.skip("\\R?");
+					
+				System.out.println("Please enter the second bus stop.\n");
+				int destination = scanner.nextInt();
+				scanner.skip("\\R?");
+
+				DijkstraSP dijkstraObj = new DijkstraSP(graph, source);
+				System.out.print("The shortest path distance between the 2 bus stops is: " +  dijkstraObj.distTo(destination) + "\n");
+
+				System.out.print("The stops along the shortest route are: " + dijkstraObj.pathTo(destination)+ "\n");
+			}
+			else
+			{
+				System.out.println("Bus stop does not exist. Please enter a valid bus stop.");
+			}
+		}
+		else if(userChoice == 2)
+		{
+			System.out.print("Please enter bus stops' full name or the first few characters to retrieve all information relating to stop.\n");
+		    String name = scanner.next();
+		
+		    if(!busStopTST.contains(name))
+			{
+				System.out.println("Sorry - No arrival times match your search.");
+			}
+			Iterable<String> namesWithPrefix = busStopTST.keysWithPrefix(name);
+			System.out.print(namesWithPrefix);
+			String namesWithPrefixString = namesWithPrefix.toString();
+			String[] namesWithPrefixArr = namesWithPrefixString.split(" ");
+			if(namesWithPrefixArr.length > 1)
+			{
+				for(int i = 0; i < namesWithPrefixArr.length; i++)
 				{
-					Integer source = firstStop.nextInt();
-								
-					System.out.println("Please enter the bus stop 2\n");
-					Scanner secondStop = new Scanner(System.in);
-					int destination = secondStop.nextInt();
-					
-					DijkstraSP dijkstraObj = new DijkstraSP(graph, source);
-					System.out.print("The shortest path distance between the 2 bus stops is: " +  dijkstraObj.distTo(destination) + "\n");
-					
-					System.out.print("The stops on the shortest route are: " + dijkstraObj.pathTo(destination)+ "\n");
-					firstStop.close();
-					secondStop.close();
+					String info = busStopTST.get(namesWithPrefixArr[i]);
+					System.out.println(info);
+				}
+		
+			}
+			else 
+			{
+				String info = busStopTST.get(namesWithPrefixString);
+				System.out.println(info);
+			}
+		}
+		else if(userChoice == 3)
+		{
+			System.out.print("Please enter bus' arrival time to retrieve all information relating to trip.\n");		   
+			
+				String time = scanner.nextLine();
+				if(busStopTST.keysWithPrefix(time) == null)
+				{
+					System.out.println("Sorry. No bus stops match your search.");
 				}
 				else
 				{
-					System.out.println("Bus stop does not exist. Please enter a valid bus stop.");
-				}
-				
-				
-		    }
-		    else if(userChoice == 2)
-		    {
-		    	System.out.print("Please enter bus stops' full name or the first few characters in it's name to retrieve all information relating to stop.\n");
-		    	Scanner userStopInput = new Scanner(System.in);
-		    	//if(userStopInput.hasNextLine())
-		    	//{
-		    		String name = userStopInput.nextLine();
-		    		//if(busStopTST.keysWithPrefix(name) != null)
-		    		//{
-		    		System.out.print(busStopTST.keysWithPrefix(name));
-		    		//}
-		    		//else
-		    		//{
-		    			//System.out.println("Sorry - No bus stops match your search.");
-		    		//}			
-		    		userStopInput.close();
-		    	//}
-		    	//else
-		    	//{
-		    		//System.out.println("Error - please enter letters only");
-		    	//}
-		    }
-		    else if(userChoice == 3)
-		    {
-		    	System.out.print("Please enter bus' arrival time to retrieve all information relating to trip.\n");		   
-		    	Scanner userTimeInput = new Scanner(System.in);
-		    	if(userTimeInput.hasNextLine())
-		    	{
-		    		String time = userTimeInput.nextLine();
-		    		if(busStopTST.keysWithPrefix(time) == null)
-		    		{
-		    			System.out.println("Sorry - No bus stops match your search.");
-		    		}
-		    		else
-		    		{
-		    			System.out.print(arrivalTimeTST.keysWithPrefix(time));
-		    		}			
-		    		
-		    	}
-		    	else
-		    	{
-		    		System.out.println("Error - Please enter a valid arrival time;");
-		    	}
-		    	userTimeInput.close();
-		    }
-		    
-	 }
-	 else if(input.hasNext("quit"))
-	 {
-		  quit = true;
-     }
-	 else
-	 {
-		 System.out.println("Please enter a valid choice number (1-3)\n");
-		 System.out.println("Which option would you like to choose? \nPlease choose by typing 1, 2 or 3. Or type 'quit' if you would like to close the application.\n");
-	 }
-	
-	//} while(!quit);
-	scanner.close();
+					System.out.print(arrivalTimeTST.keysWithPrefix(time));
+				}			
+
+			if(!busStopTST.contains(time))
+			{
+				System.out.println("Error. Please enter a valid arrival time.");
+			}
+		}
+		else
+		{
+			System.out.println("Error. Please enter a valid choice number (1-3)\n");
+		}
 	}
+	else {
+		String newLine = scanner.nextLine();
+		if(newLine.equals("quit")) {
+			quit = true;
+		}
+		else {
+			System.out.println("Error. Please enter a valid choice number (1-3)\n");
+		}
+	}
+
+}
+scanner.close();
+}
 }
 	
-	
-		
-
-
