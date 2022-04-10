@@ -96,6 +96,33 @@ public class FinalProject
 			System.out.println("File not found");	
         } 
 			//br2.close();
+
+			try(BufferedReader br3 = new BufferedReader(new FileReader("/Users/aliconnolly/Algorithms2 Final project/Algorithms2-Final-project/stop_times.txt")))
+	{	
+	   br3.readLine();
+	   String line3 = null;
+	
+			
+	   String arrival_time = null;
+	   String stop_id3 = null;
+			
+			
+	   while((line3 = br3.readLine()) != null)
+		{
+				
+			String[] parts = line3.split(",");
+				
+			 arrival_time = parts[1].trim();
+			 stop_id3 = parts[3].trim();
+	
+	
+	     } 
+		//br3.close();	
+	}
+	catch(IOException e)
+	{
+		System.out.println("No such file found.");
+	}
 	    
 // GET USER INPUT		
 		// get user to input 2 bus stops
