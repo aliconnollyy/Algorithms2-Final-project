@@ -1,95 +1,81 @@
+ import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.util.Map;
 import java.util.Scanner;
+import edu.princeton.cs.algs4.DijkstraSP;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import edu.princeton.cs.algs4.DirectedEdge;
+import edu.princeton.cs.algs4.EdgeWeightedDigraph;
+import edu.princeton.cs.algs4.TST;
+
 
 public class FinalProject
 {
-
-	public static void main(String[] args) 
+	public static void main(String[] args) throws IOException 
 	{
-
-	
-	
-// READING IN INPUT FILES		
-		// read in stops.txt (list of stops)
-		String stopsFileLine = "";
-		try {
-			File stopsFile = new File("stops.txt");
-			Scanner myReaderStops = new Scanner(stopsFile);
-			while(myReaderStops.hasNextLine())
-			{
-				stopsFileLine = myReaderStops.nextLine();				
-			}
-			myReaderStops.close();
-			String[] splitStopsArray = stopsFileLine.split(",");
-			int[] stopsFileArray = new int[splitStopsArray.length];
-			for(int j = 0; j < splitStopsArray.length; j++)
-			{
-				// array of bus stops
-				// stop_id, stop_code, stop_name, stop_desc, stop_lat, stop_lon, zone_id, stop_url, location_type, parent_station
+ 	try(BufferedReader br1 = new BufferedReader(new FileReader("/Users/aliconnolly/Algorithms2 Final project/Algorithms2-Final-project/stops.txt")))
+	    {
+	    	br1.readLine();
+	    	String line = null;
+	    	int stopIndex = 0;
+			
+	    	String stop_name = null;
+			
+	    	while((line = br1.readLine()) != null)
+	    	{
+	    		
+                	
+            }
+                
+	    		  		
 				
-				stopsFileArray[j] = Integer.parseInt(splitStopsArray[j]);
-			}
+	    			
+	    }
+		
 			
-		}
-		catch(FileNotFoundException e)
+		try(BufferedReader br2 = new BufferedReader(new FileReader("/Users/aliconnolly/Algorithms2 Final project/Algorithms2-Final-project/transfers.txt")))
 		{
-			System.out.println("An error occured - file name may be incorrect");
-			e.printStackTrace();
+			br2.readLine();
+			String line2 = null;
+			while((line2 = br2.readLine()) != null)
+			{
+				
+			}
 		}
-		
-		// read in stop_times.txt (edge only exists if they have sam ID (directed and undirected)?)
-		String stopTimesFileLine = "";
-		try {
-			File stopTimesFile = new File("stops_times.txt");
-			Scanner myReaderStopTimes = new Scanner(stopTimesFile);
-			while(myReaderStopTimes.hasNextLine())
-			{
-				// stop times array
-				// trip_id, arrival_time, departure_time, stop_id, stop_sequence, stop_headsign, pickup_type,drop_off_type, shape_dist_traveled
-				stopTimesFileLine = myReaderStopTimes.nextLine();				
-			}
-			myReaderStopTimes.close();
-			String[] splitStopTimesArray = stopTimesFileLine.split(",");
-			int[] stopTimesFileArray = new int[splitStopTimesArray.length];
-			for(int j = 0; j < splitStopTimesArray.length; j++)
-			{
-				// array of
-				stopTimesFileArray[j] = Integer.parseInt(splitStopTimesArray[j]);
-			}
+	    catch(IOException e)
+		{
+			System.out.println("File not found");	
+        } 
+			//br2.close();
 			
-		}
-		catch(FileNotFoundException e)
+	try(BufferedReader br3 = new BufferedReader(new FileReader("/Users/aliconnolly/Algorithms2 Final project/Algorithms2-Final-project/stop_times.txt")))
+	{	
+	   br3.readLine();
+	   String line3 = null;
+	   int prev_stop_id = 646;
+	   double transferCost = 1.0;
+			
+	   String arrival_time = null;
+	   String stop_id3 = null;
+			
+			
+	   while((line3 = br3.readLine()) != null)
 		{
-			System.out.println("An error occured - file name may be incorrect");
-			e.printStackTrace();
-		}
-		
-		
-		// read in transfers.txt (directed edges)
-		String transfersFileLine = "";
-		try {
-			File transfersFile = new File("transfers.txt");
-			Scanner myReaderTransfers = new Scanner(transfersFile);
-			while(myReaderTransfers.hasNextLine())
-			{
-				// from_stop_id, to_stop_id, transfer_type, min_transfer_time
-				transfersFileLine = myReaderTransfers.nextLine();				
-			}
-			myReaderTransfers.close();
-			String[] splitTransfersArray = transfersFileLine.split(",");
-			int[] transfersFileArray = new int[splitTransfersArray.length];
-			for(int j = 0; j < splitTransfersArray.length; j++)
-			{
-				transfersFileArray[j] = Integer.parseInt(splitTransfersArray[j]);
-			}
-					
-		}
-		catch(FileNotFoundException e)
-		{
-			System.out.println("An error occured - file name may be incorrect");
-			e.printStackTrace();
-		}
+				
+			
+	     } 
+		//br3.close();	
+	}
+	catch(IOException e)
+	{
+		System.out.println("No such file found.");
+	}
 		
 
 		
