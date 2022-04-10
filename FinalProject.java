@@ -19,7 +19,10 @@ public class FinalProject
 {
 	public static void main(String[] args) throws IOException 
 	{
-	
+		int numOfVertices = 0;
+		
+		Map<Integer, Integer> mapStopsIndices = new HashMap<Integer, Integer>();
+		
 		
 	    try(BufferedReader br1 = new BufferedReader(new FileReader("/Users/aliconnolly/Algorithms2 Final project/Algorithms2-Final-project/stops.txt")))
 	    {
@@ -52,8 +55,14 @@ public class FinalProject
                 	stop_name = tempArray.toString();
                 	
                 }
-                	    		
-		
+                
+	    		
+	    		
+				
+	    	
+				
+	    		mapStopsIndices.put(stop_id, stopIndex);
+	    		stopIndex++;	
 	    	}
 			
 	    	List<String> stops = Files.readAllLines(new File("/Users/aliconnolly/Algorithms2 Final project/Algorithms2-Final-project/stops.txt").toPath(), Charset.defaultCharset());
@@ -70,8 +79,11 @@ public class FinalProject
 	    catch(IOException e)
 	    {
 	    	System.out.println("Sorry no such file found.");
-		}
-
+	    }
+			
+			//br1.close();
+			EdgeWeightedDigraph graph = new EdgeWeightedDigraph(numOfVertices);
+			
 		try(BufferedReader br2 = new BufferedReader(new FileReader("/Users/aliconnolly/Algorithms2 Final project/Algorithms2-Final-project/transfers.txt")))
 		{
 			br2.readLine();
@@ -88,7 +100,7 @@ public class FinalProject
 				int fromStopIndex = mapStopsIndices.get(from_stop_id);
 				int toStopIndex = mapStopsIndices.get(to_stop_id);
 
-			
+				graph.addEdge(new DirectedEdge(fromStopIndex, toStopIndex, transferCost));
 			}
 		}
 	    catch(IOException e)
@@ -96,12 +108,13 @@ public class FinalProject
 			System.out.println("File not found");	
         } 
 			//br2.close();
-
-			try(BufferedReader br3 = new BufferedReader(new FileReader("/Users/aliconnolly/Algorithms2 Final project/Algorithms2-Final-project/stop_times.txt")))
+			
+	try(BufferedReader br3 = new BufferedReader(new FileReader("/Users/aliconnolly/Algorithms2 Final project/Algorithms2-Final-project/stop_times.txt")))
 	{	
 	   br3.readLine();
 	   String line3 = null;
-	
+	   int prev_stop_id = 646;
+	   double transferCost = 1.0;
 			
 	   String arrival_time = null;
 	   String stop_id3 = null;
@@ -115,7 +128,13 @@ public class FinalProject
 			 arrival_time = parts[1].trim();
 			 stop_id3 = parts[3].trim();
 	
-	
+			
+			int fromStopIndex = mapStopsIndices.get(prev_stop_id);
+			int toStopIndex = mapStopsIndices.get(Integer.parseInt(stop_id3));
+								
+			graph.addEdge(new DirectedEdge(fromStopIndex, toStopIndex, transferCost));
+				
+			prev_stop_id = Integer.parseInt(stop_id3);
 	     } 
 		//br3.close();	
 	}
